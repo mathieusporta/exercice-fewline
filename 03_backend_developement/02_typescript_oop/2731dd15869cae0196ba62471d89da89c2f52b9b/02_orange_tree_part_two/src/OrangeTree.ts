@@ -1,87 +1,77 @@
 import { Tree } from "./Tree";
-// Code your class here.
+
 class OrangeTree extends Tree {
-  oranges: string[];
-  constructor(age: number, oranges: string[] = []) {
-    super(age);
-    this.oranges = oranges;
-  }
+  oranges: string[] = [];
+
   ageOneYear(): void {
+    this.potentiallyDie()
     if (this.alive) {
-      this.age = this.age + 1;
-      this.growOranges();
-      this.alive = this. isAlive();
-    }
-  }
-  isAlive(): boolean {
-    const probability: number = Math.floor(Math.random() * Math.floor(2) + 1);
-    if (this.age > 100) {
-      return false;
-    } else if (this.age >= 50 && this.age < 100) {
-      if (probability === 0) {
-        const prob: boolean = false;
-        return false;
-      } else {
-        const prob: boolean = true;
-        return this.alive;
+      this.age += 1;
+
+      if (this.age < 10) {
+        this.height += 25;
+      } else if (this.age >= 10 && this.age <= 20) {
+        this.height += 10;
       }
-    } else if (this.age < 50) {
-      return true;
+
+
+      this.growOranges();
     }
   }
-  growOranges(): void {
+
+  private potentiallyDie(): void {
+    this.alive = this.isAlive();
+  }
+
+  private handleOrangeGrowth(num: number): void {
+    for (let i = 0; i < num; i++) {
+      this.oranges.push("🍊");
+    }
+  }
+
+  private growOranges(): void {
+    this.oranges = [];
+
+    let num = 0;
 
     if (this.age >= 5 && this.age <= 10) {
-        this.oranges= [];
-      this.oranges.push(
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊"
-      );
+      num = 10;
+    } else if (this.age > 10 && this.age <= 20) {
+      num = 20;
+    } else if (this.age > 20 && this.age <= 40) {
+      num = 5;
     }
-    if (this.age >= 11 && this.age <= 20) {
-        this.oranges= [];
-      this.oranges.push(
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊",
-        "🍊"
-      );
-    }
-    if (this.age >= 21 && this.age <= 40) {
-        this.oranges= [];
-      this.oranges.push("🍊", "🍊", "🍊", "🍊", "🍊");
-    }
+
+    this.handleOrangeGrowth(num);
   }
 
   pickAnOrange(): void {
-      if (this.oranges.length >0) {
-          this.oranges.pop()
-      }
-    console.log("tree");
+    if (this.oranges.length > 0) {
+      // Remove one orange from the tree.
+      this.oranges.pop();
+      console.log("You picked one 🍊.");
+    } else {
+      console.log("There is no 🍊.");
+    }
+  }
+
+  isAlive(): boolean {  
+    if (this.age < 50) { 
+      return true;
+    }
+    if (this.age >100) { 
+      return false;
+    }
+    const chanceToDie = (this.age - 50) / 50
+    // age 50 => chanceToDie ~ 0
+    // age 75 => chanceToDie = 0.5
+    // age 100 => chanceToDie = 1
+    return Math.random() < chanceToDie
+  }
+
+  seed(): void {
+    super.seed();
+    this.oranges = [];
   }
 }
 
